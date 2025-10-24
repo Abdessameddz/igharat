@@ -20,6 +20,11 @@ if (typeof version == 'undefined') {
     version = "new";
 }
 
+// إضافة المتغيرات للوضع التلقائي
+var autoMode = false;
+var currentGroup = 0;
+var totalGroups = 0;
+var autoRestartDelay = 5000; // 5 ثواني قبل إعادة التشغيل
 
 //set translations
 var langShinko = [
@@ -51,29 +56,29 @@ if (game_data.locale == "ro_RO") {
 if (game_data.locale == "ar_AE") {
     //arabic server
     langShinko = [
-        "Ø§Ù„Ø§ØºØ§Ø±Ø§Øª",
-        "Ø§Ø®ØªØ§Ø± Ø§Ù„ÙˆØ­Ø¯Ø§Øª Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…Ø© ÙÙ‰ Ø§Ù„Ø§ØºØ§Ø±Ø§Øª",
-        "Ø§Ø®ØªØ§Ø± Ø§Ù†ÙˆØ§Ø¹   Ø§Ù„Ø§ØºØ§Ø±Ø§Øª Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…Ø© ",
-        " Ù…Ø§ Ø§Ù„Ù…Ø¯Ù‡ Ø§Ù„Ù…Ø¯Ù‡ Ø§Ù„Ø²Ù…Ù†ÙŠÙ‡ Ø§Ù„Ù…Ø±Ø§Ø¯ Ø§Ø±Ø³Ø§Ù„ Ø§Ù„Ø§ØºØ§Ø±Ø§Øª Ø¨Ù‡Ø§",
-        "Ø¶Ø¹ Ø§Ø§Ù„Ù…Ø¯Ù‡ Ù‡Ù†Ø§",
-        "Ø­Ø³Ø§Ø¨ Ø§Ù„Ù…Ø¯Ù‡ Ù„ÙƒÙ„ ØµÙØ­Ù‡ ",
+        "الاغارات",
+        "اختر الوحدات المستخدمة فى الاغارات",
+        "اختر انواع  الاغارات المستخدمة ",
+        " ما المده المده الزمنيه المراد ارسال الاغارات بها",
+        "ضع المده هنا",
+        "حساب المده لكل صفحه ",
         "Creator: ",
-        "Ø§Ù„Ø§ØºØ§Ø±Ø§Øª : ØªØ±Ø³Ù„ Ù„ÙƒÙ„ 50 Ù‚Ø±ÙŠÙ‡ Ø¹Ù„Ù‰ Ø­Ø¯Ù‰ ",
-        " ØªØ´ØºÙŠÙ„ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© "
+        "الاغارات : ترسل لكل 50 قرية على حدى ",
+        " تشغيل المجموعة "
     ]
 }
 if (game_data.locale == "el_GR") {
     //greek server
     langShinko = [
-        "ÎœÎ±Î¶Î¹ÎºÎ® ÏƒÎ¬ÏÏ‰ÏƒÎ·",
-        "Î•Ï€Î¹Î»Î­Î¾Ï„Îµ Ï„Î¹Ï‚ Î¼Î¿Î½Î¬Î´ÎµÏ‚ Î¼Îµ Ï„Î¹Ï‚ Î¿Ï€Î¿Î¯ÎµÏ‚ Î¸Î± ÎºÎ¬Î½ÎµÏ„Îµ ÏƒÎ¬ÏÏ‰ÏƒÎ·",
-        "Î•Ï€Î¹Î»Î­Î¾Ï„Îµ ÎµÏ€Î¯Ï€ÎµÎ´Î± ÏƒÎ¬ÏÏ‰ÏƒÎ·Ï‚ Ï€Î¿Ï… Î¸Î± Ï‡ÏÎ·ÏƒÎ¹Î¼Î¿Ï€Î¿Î¹Î·Î¸Î¿ÏÎ½",
-        "Î§ÏÏŒÎ½Î¿Ï‚ Î£Î¬ÏÏ‰ÏƒÎ·Ï‚ (ÎÏÎµÏ‚.Î›ÎµÏ€Ï„Î¬)",
-        "Î§ÏÏŒÎ½Î¿Ï‚",
-        "Î¥Ï€Î¿Î»ÏŒÎ³Î¹ÏƒÎµ Ï‡ÏÏŒÎ½Î¿Ï…Ï‚ ÏƒÎ¬ÏÏ‰ÏƒÎ·Ï‚ Î³Î¹Î± ÎºÎ¬Î¸Îµ ÏƒÎµÎ»Î¯Î´Î±.",
-        "Î”Î·Î¼Î¹Î¿Ï…ÏÎ³ÏŒÏ‚: ",
-        "ÎœÎ±Î¶Î¹ÎºÎ® ÏƒÎ¬ÏÏ‰ÏƒÎ·: Î‘Ï€Î¿ÏƒÏ„Î¿Î»Î® Î±Î½Î± 50 Ï‡Ï‰ÏÎ¹Î¬",
-        "Î‘Ï€Î¿ÏƒÏ„Î¿Î»Î® Î¿Î¼Î¬Î´Î±Ï‚ "
+        "Μαζική σάρωση",
+        "Επιλέξτε τις μονάδες με τις οποίες θα κάνετε σάρωση",
+        "Επιλέξτε επίπεδο σάρωσης που θα χρησιμοποιηθούν",
+        "Χρόνος Σάρωσης (Ώρες.Λεπτά)",
+        "Χρόνος",
+        "Υπολόγισε χρόνους σάρωσης για κάθε σελίδα.",
+        "Δημιουργός: ",
+        "Μαζική σάρωση: Αποστολή ανα 50 χωριά",
+        "Αποστολή ομάδας "
     ]
 }
 if (game_data.locale == "nl_NL") {
@@ -216,6 +221,16 @@ else {
     var runTimes = JSON.parse(localStorage.getItem("runTimes"));
 }
 
+// التحقق من وضع التلقائي المحفوظ
+if (localStorage.getItem("autoMode") == null) {
+    console.log("No autoMode found, making new one")
+    localStorage.setItem("autoMode", JSON.stringify(false));
+}
+else {
+    console.log("Getting autoMode from storage");
+    var autoMode = JSON.parse(localStorage.getItem("autoMode"));
+}
+
 if (typeof premiumBtnEnabled == 'undefined') {
     var premiumBtnEnabled = false;
 }
@@ -300,6 +315,14 @@ color: white;
     width: 30px;
     height: 30px;
 }
+.autoModeOn {
+    background-color: #44ff44 !important;
+    color: black !important;
+}
+.autoModeOff {
+    background-color: #ff4444 !important;
+    color: white !important;
+}
 </style>`
 }
 else {
@@ -343,6 +366,14 @@ else {
             width: 30px;
             height: 30px;
         }
+        .autoModeOn {
+            background-color: #44ff44 !important;
+            color: black !important;
+        }
+        .autoModeOff {
+            background-color: #ff4444 !important;
+            color: white !important;
+        }
         </style>`
     }
     else if (colors == "swedish") {
@@ -385,6 +416,14 @@ else {
             right: 30px;
             width: 30px;
             height: 30px;
+        }
+        .autoModeOn {
+            background-color: #44ff44 !important;
+            color: black !important;
+        }
+        .autoModeOff {
+            background-color: #ff4444 !important;
+            color: white !important;
         }
         </style>`
 
@@ -432,6 +471,14 @@ else {
             right: 30px;
             width: 30px;
             height: 30px;
+        }
+        .autoModeOn {
+            background-color: #44ff44 !important;
+            color: black !important;
+        }
+        .autoModeOff {
+            background-color: #ff4444 !important;
+            color: white !important;
         }
         </style>`
 
@@ -491,6 +538,14 @@ else {
             width: 30px;
             height: 30px;
         }
+        .autoModeOn {
+            background-color: #44ff44 !important;
+            color: black !important;
+        }
+        .autoModeOff {
+            background-color: #ff4444 !important;
+            color: white !important;
+        }
         </style>`
     }
     else {
@@ -539,6 +594,14 @@ else {
                 right: 30px;
                 width: 30px;
                 height: 30px;
+            }
+            .autoModeOn {
+                background-color: #44ff44 !important;
+                color: black !important;
+            }
+            .autoModeOff {
+                background-color: #ff4444 !important;
+                color: white !important;
             }
             </style>`
     }
@@ -684,6 +747,16 @@ function getData() {
                             //add row with new button
                             htmlWithLaunchButtons += `<tr id="sendRow${s}" style="text-align:center; width:auto; background-color:${backgroundColor}"><td style="text-align:center; width:auto; background-color:${backgroundColor}"><center><input type="button"  class="btn btnSophie" id="sendMass" onclick="sendGroup(${s},false)" value="${langShinko[8]}${s + 1}"></center></td><td style="text-align:center; width:auto; background-color:${backgroundColor}"><center><input type="button"  class="btn btn-pp btn-send-premium" id="sendMassPremium" onclick="sendGroup(${s},true)" value="${langShinko[8]}${s + 1} WITH PREMIUM" style="display:none"></center></td></tr>`
                         }
+                        
+                        // إضافة زر الوضع التلقائي في واجهة الإرسال
+                        htmlWithLaunchButtons += `<tr style="text-align:center; width:auto; background-color:${headerColor}">
+                            <td colspan="2" style="text-align:center; width:auto; background-color:${backgroundColor}; padding:10px;">
+                                <center>
+                                    <input type="button" class="btn ${autoMode ? 'autoModeOn' : 'autoModeOff'}" id="autoModeToggleFinal" onclick="toggleAutoMode()" value="${autoMode ? 'تعطيل الوضع التلقائي' : 'تفعيل الوضع التلقائي'}">
+                                </center>
+                            </td>
+                        </tr>`;
+                        
                         htmlWithLaunchButtons += "</table></div>"
                         //appending to page
                         console.log("Creating launch UI");
@@ -698,7 +771,12 @@ function getData() {
                                 $($("#sendMassPremium")[prem]).show();
                             }
                         }
-                        $("#sendMass")[0].focus()
+                        $("#sendMass")[0].focus();
+                        
+                        // بدء الوضع التلقائي إذا كان مفعلاً
+                        if (autoMode) {
+                            setTimeout(startAutoProcess, 2000);
+                        }
                     }
                 },
                 (error) => {
@@ -711,7 +789,7 @@ function getData() {
 //first UI, will always open as soon as you run the script.
 html = `
 <div id="massScavengeSophie" class="ui-widget-content" style="width:600px;background-color:${backgroundColor};cursor:move;z-index:50;">
-<button class="btn" id ="cog" onclick="settings()">âš™ï¸</button>
+<button class="btn" id ="cog" onclick="settings()">⚙️</button>
 <button class="btn" id = "x" onclick="closeWindow('massScavengeSophie')">
             X
         </button>
@@ -840,6 +918,17 @@ html = `
             <td style="text-align:center; width:50%; background-color:${backgroundColor}; padding:5px;"> <font color="${titleColor}">Settings bugged?</font></td>
             <td style="text-align:center; width:50%; background-color:${backgroundColor}; padding:5px;"><center><input type="button" class="btn btnSophie" id="reset" onclick="resetSettings()" value="Reset settings"></center></td>
         </tr>
+        <!-- إضافة زر الوضع التلقائي -->
+        <tr style="text-align:center; width:auto; background-color:${headerColor}">
+            <td style="text-align:center; width:50%; background-color:${backgroundColor}; padding:5px;"> 
+                <font color="${titleColor}">الوضع التلقائي</font>
+            </td>
+            <td style="text-align:center; width:50%; background-color:${backgroundColor}; padding:5px;">
+                <center>
+                    <input type="button" class="btn ${autoMode ? 'autoModeOn' : 'autoModeOff'}" id="autoModeToggle" onclick="toggleAutoMode()" value="${autoMode ? 'تعطيل الوضع التلقائي' : 'تفعيل الوضع التلقائي'}">
+                </center>
+            </td>
+        </tr>
     </table>
     <hr>
     <center><input type="button" class="btn btnSophie" id="sendMass" onclick="readyToSend()" value="${langShinko[5]}"></center>
@@ -958,7 +1047,6 @@ for (var i = 0; i < sendOrder.length; i++) {
 
     enableCorrectTroopTypes();
 }
-
 
 
 //focus calculate button!
@@ -1080,7 +1168,110 @@ function sendGroup(groupNr, premiumEnabled) {
         $(':button[id^="sendMass"]').prop('disabled', false); 
         $(':button[id^="sendMassPremium"]').prop('disabled', false); 
         $("#sendMass")[0].focus(); 
+        
+        // إذا كان الوضع التلقائي مفعلاً، تحقق من المجموعات المتبقية
+        if (autoMode) {
+            setTimeout(checkRemainingGroups, 1000);
+        }
     }, 200);
+}
+
+// الدوال الجديدة للوضع التلقائي
+function toggleAutoMode() {
+    autoMode = !autoMode;
+    localStorage.setItem("autoMode", JSON.stringify(autoMode));
+    
+    // تحديث الأزرار في كل الواجهات
+    $('.autoModeOn, .autoModeOff').each(function() {
+        if (autoMode) {
+            $(this).removeClass('autoModeOff').addClass('autoModeOn').val('تعطيل الوضع التلقائي');
+        } else {
+            $(this).removeClass('autoModeOn').addClass('autoModeOff').val('تفعيل الوضع التلقائي');
+        }
+    });
+    
+    if (autoMode) {
+        UI.SuccessMessage("الوضع التلقائي مفعّل - سيتم إرسال المجموعات تلقائياً");
+        startAutoProcess();
+    } else {
+        UI.SuccessMessage("الوضع التلقائي معطّل");
+    }
+}
+
+function startAutoProcess() {
+    if (!autoMode) return;
+    
+    console.log("بدء العملية التلقائية");
+    
+    // إذا كانت واجهة الإرسال موجودة، ابدأ بالإرسال التلقائي
+    if ($("#massScavengeFinal").length > 0) {
+        setTimeout(autoSendGroups, 2000);
+    } else {
+        // إذا لم تكن موجودة، انقر على زر الحساب بعد ثانيتين
+        setTimeout(function() {
+            if ($("#sendMass").length > 0 && autoMode) {
+                console.log("النقر التلقائي على زر الحساب");
+                $("#sendMass").click();
+            }
+        }, 2000);
+    }
+}
+
+function autoSendGroups() {
+    if (!autoMode) return;
+    
+    // احسب عدد المجموعات الإجمالية
+    var sendButtons = $('input[id^="sendMass"]');
+    totalGroups = sendButtons.length;
+    
+    console.log(`المجموعات المتاحة: ${totalGroups}`);
+    
+    if (currentGroup < totalGroups) {
+        // أرسل المجموعة الحالية
+        console.log(`إرسال المجموعة ${currentGroup + 1} تلقائياً`);
+        sendGroup(currentGroup, false);
+    } else {
+        // انتهت جميع المجموعات، أعد التشغيل
+        console.log("انتهت جميع المجموعات، إعادة التشغيل...");
+        setTimeout(restartScript, autoRestartDelay);
+    }
+}
+
+function checkRemainingGroups() {
+    if (!autoMode) return;
+    
+    var remainingGroups = $('input[id^="sendMass"]').length;
+    console.log(`باقي ${remainingGroups} مجموعة`);
+    
+    if (remainingGroups > 0) {
+        // استمر في الإرسال التلقائي
+        currentGroup++;
+        setTimeout(autoSendGroups, 2000);
+    } else {
+        // لا توجد مجموعات باقية، أعد التشغيل
+        console.log("انتهت جميع المجموعات، إعادة التشغيل...");
+        setTimeout(restartScript, autoRestartDelay);
+    }
+}
+
+function restartScript() {
+    if (!autoMode) return;
+    
+    console.log("إعادة تشغيل السكربت تلقائياً...");
+    UI.SuccessMessage("إعادة تشغيل السكربت تلقائياً...");
+    
+    // أعد تعيين المجموعة الحالية
+    currentGroup = 0;
+    
+    // أعد تحميل الصفحة وتشغيل السكربت
+    setTimeout(function() {
+        window.location.reload();
+    }, 2000);
+}
+
+// بدء الوضع التلقائي إذا كان مفعلاً عند التحميل
+if (autoMode) {
+    setTimeout(startAutoProcess, 3000);
 }
 
 
@@ -1301,6 +1492,7 @@ function resetSettings() {
     localStorage.removeItem("sendOrder");
     localStorage.removeItem("runTimes");
     localStorage.removeItem("keepHome");
+    localStorage.removeItem("autoMode");
     UI.BanneredRewardMessage("Settings reset");
     window.location.reload();
 }
@@ -1439,155 +1631,3 @@ village_id
 is_locked: (true or false)
 unlock_time: null
 scavenging_squad: null
-*/
-
-
-
-/* -------------------------
-   Auto-run helper (مضاف تلقائياً)
-   يضغط على "حساب المده لكل صفحه" ثم يضغط على "تشغيل المجموعة 1" ثم يعيد تحميل الصفحة ويكرر.
-   التحكم عبر startAuto() و stopAuto() من console.
-------------------------- */
-
-(function() {
-    // منع إضافة الموديول مرتين
-    if (window._massScavengeAutoAdded) return;
-    window._massScavengeAutoAdded = true;
-
-    window._autoScavenge = {
-        enabled: false,
-        delayToClickGroupMs: 2000,
-        delayAfterSendMs: 1500,
-        maxWaitForLaunchUiMs: 10000,
-        groupIndexToSend: 0,
-        usePremiumOnSend: false,
-        retryDelayOnFailMs: 2000
-    };
-
-    function startAuto(opts) {
-        if (opts and typeof opts === 'object') {
-            if (typeof opts.delayToClickGroupMs === 'number') window._autoScavenge.delayToClickGroupMs = opts.delayToClickGroupMs;
-            if (typeof opts.delayAfterSendMs === 'number') window._autoScavenge.delayAfterSendMs = opts.delayAfterSendMs;
-            if (typeof opts.maxWaitForLaunchUiMs === 'number') window._autoScavenge.maxWaitForLaunchUiMs = opts.maxWaitForLaunchUiMs;
-            if (typeof opts.groupIndexToSend === 'number') window._autoScavenge.groupIndexToSend = opts.groupIndexToSend;
-            if (typeof opts.usePremiumOnSend === 'boolean') window._autoScavenge.usePremiumOnSend = opts.usePremiumOnSend;
-            if (typeof opts.retryDelayOnFailMs === 'number') window._autoScavenge.retryDelayOnFailMs = opts.retryDelayOnFailMs;
-        }
-        if (window._autoScavenge.enabled) {
-            console.log("Auto already running");
-            return;
-        }
-        window._autoScavenge.enabled = true;
-        console.log("Auto-started (scavenging).");
-        _autoRunIteration();
-    }
-
-    function stopAuto() {
-        window._autoScavenge.enabled = false;
-        console.log("Auto stopped.");
-    }
-
-    window.startAuto = startAuto;
-    window.stopAuto = stopAuto;
-
-    function _autoRunIteration() {
-        if (!window._autoScavenge.enabled) return;
-        try {
-            console.log("Auto: calling readyToSend() ...");
-            if (typeof readyToSend === 'function') {
-                readyToSend();
-            } else {
-                var calcBtn = document.querySelector('input[id="sendMass"][value*="حساب"], input[id="sendMass"][value*="Calculate"], button[id="calcRuntime"], #calcRuntime, .calcRuntime');
-                if (calcBtn) {
-                    calcBtn.click();
-                } else {
-                    console.warn("Auto: readyToSend() not found and calc button not found. Will retry.");
-                    if (window._autoScavenge.enabled) setTimeout(_autoRunIteration, window._autoScavenge.retryDelayOnFailMs);
-                    return;
-                }
-            }
-        } catch (e) {
-            console.error("Auto: error calling readyToSend():", e);
-            if (window._autoScavenge.enabled) setTimeout(_autoRunIteration, window._autoScavenge.retryDelayOnFailMs);
-            return;
-        }
-
-        var waited = 0;
-        var pollInterval = 300;
-        var maxWait = window._autoScavenge.maxWaitForLaunchUiMs;
-        var poll = setInterval(function () {
-            if (!window._autoScavenge.enabled) {
-                clearInterval(poll);
-                return;
-            }
-
-            var foundBtn = null;
-            var byId = document.getElementById("sendRow" + window._autoScavenge.groupIndexToSend);
-            if (byId) {
-                var btn = byId.querySelector('input[type="button"], button');
-                if (btn) foundBtn = btn;
-            }
-
-            if (!foundBtn) {
-                var massLaunchContainer = document.getElementById("massScavengeFinal") || document.querySelector(".massScavengeFinal");
-                if (massLaunchContainer) {
-                    var inputs = massLaunchContainer.querySelectorAll('input[type="button"], button');
-                    if (inputs && inputs.length > 0) {
-                        foundBtn = inputs[0];
-                    }
-                }
-            }
-
-            if (!foundBtn) {
-                var startBtns = document.querySelectorAll('input[id^="sendMass"], button[id^="sendMass"], input[class*="sendMass"], button[class*="sendMass"]');
-                if (startBtns && startBtns.length > 0) {
-                    foundBtn = startBtns[0];
-                }
-            }
-
-            if (foundBtn || typeof sendGroup === 'function') {
-                clearInterval(poll);
-                setTimeout(function() {
-                    if (!window._autoScavenge.enabled) return;
-                    try {
-                        console.log("Auto: attempting to launch group index", window._autoScavenge.groupIndexToSend);
-                        if (typeof sendGroup === 'function') {
-                            sendGroup(window._autoScavenge.groupIndexToSend, window._autoScavenge.usePremiumOnSend);
-                        } else if (foundBtn) {
-                            foundBtn.click();
-                        } else {
-                            console.warn("Auto: no sendGroup() and no button to click");
-                        }
-                    } catch (e) {
-                        console.error("Auto: error when sending group:", e);
-                    }
-
-                    setTimeout(function() {
-                        if (!window._autoScavenge.enabled) return;
-                        console.log("Auto: reloading page to repeat process");
-                        window.location.reload();
-                    }, window._autoScavenge.delayAfterSendMs);
-
-                }, window._autoScavenge.delayToClickGroupMs);
-
-                return;
-            }
-
-            waited += pollInterval;
-            if (waited >= maxWait) {
-                clearInterval(poll);
-                console.warn("Auto: launch UI didn't appear within timeout (" + maxWait + "ms). Retrying entire iteration after delay.");
-                if (window._autoScavenge.enabled) setTimeout(_autoRunIteration, window._autoScavenge.retryDelayOnFailMs);
-            }
-
-        }, pollInterval);
-    }
-
-    // Uncomment the next line to auto-start on page load:
-    // startAuto();
-
-    console.log("Auto-run helper added. Use startAuto() and stopAuto() from the console.");
-    console.log("Example: startAuto({ delayToClickGroupMs:2000, delayAfterSendMs:1500, groupIndexToSend:0, usePremiumOnSend:false });");
-
-})(); // end auto-run helper
-
